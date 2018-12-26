@@ -36,9 +36,10 @@ function mos_faq_settings_init() {
 	
 	add_settings_section('mos_faq_section_scripts_start', '', 'mos_faq_section_scripts_start_cb', 'mos_faq');
 	add_settings_field( 'field_jquery', __( 'JQuery', 'mos_faq' ), 'mos_faq_field_jquery_cb', 'mos_faq', 'mos_faq_section_scripts_start', [ 'label_for' => 'mos_faq_jquery' ] );
+	add_settings_field( 'field_fontawesome', __( 'Font Awesome', 'mos_faq' ), 'mos_faq_field_fontawesome_cb', 'mos_faq', 'mos_faq_section_scripts_start', [ 'label_for' => 'mos_faq_fontawesome' ] );
 	add_settings_field( 'field_css', __( 'Custom Css', 'mos_faq' ), 'mos_faq_field_css_cb', 'mos_faq', 'mos_faq_section_scripts_start', [ 'label_for' => 'mos_faq_css' ] );
 	add_settings_field( 'field_js', __( 'Custom Js', 'mos_faq' ), 'mos_faq_field_js_cb', 'mos_faq', 'mos_faq_section_scripts_start', [ 'label_for' => 'mos_faq_js' ] );
-	add_settings_section('mos_faq_section_end', '', 'mos_faq_section_end_cb', 'mos_faq');
+	add_settings_section('mos_faq_section_scripts_end', '', 'mos_faq_section_end_cb', 'mos_faq');
 }
 add_action( 'admin_init', 'mos_faq_settings_init' );
 
@@ -62,7 +63,7 @@ function mos_faq_section_top_nav_cb( $args ) {
         <li class="tab-nav <?php if($data['active_tab'] == 'heading') echo 'active';?>"><a data-id="heading" href="<?php echo $data['option_prefix'];?>heading">Heading</a></li>
         <li class="tab-nav <?php if($data['active_tab'] == 'icon') echo 'active';?>"><a data-id="icon" href="<?php echo $data['option_prefix'];?>icon">Icon</a></li>
         <li class="tab-nav <?php if($data['active_tab'] == 'content') echo 'active';?>"><a data-id="content" href="<?php echo $data['option_prefix'];?>content">Content</a></li>
-        <li class="tab-nav <?php if($data['active_tab'] == 'scripts') echo 'active';?>"><a data-id="scripts" href="<?php echo $data['option_prefix'];?>scripts">Scripts</a></li>
+        <li class="tab-nav <?php if($data['active_tab'] == 'scripts') echo 'active';?>"><a data-id="scripts" href="<?php echo $data['option_prefix'];?>scripts">Advanced CSS, JS</a></li>
     </ul>
 	<?php
 }
@@ -505,6 +506,7 @@ function mos_faq_field_icon_cb( $args ) {
 	global $font_align, $font_weight, $border_style, $icons;
 	?>
 	<fieldset>
+		<label><input type='radio' name='mos_faq_option[<?php echo esc_attr( $args['label_for_icon'] ); ?>]' value=''/> None</label>
 	<?php foreach ($icons as $key => $value) : ?>
 		<?php $slices = explode(" ",$value) ?>
 		<label><input type='radio' name='mos_faq_option[<?php echo esc_attr( $args['label_for_icon'] ); ?>]' value='<?php echo $key ?>'  <?php echo isset( $options[ $args['label_for_icon'] ] ) ? ( checked( $options[ $args['label_for_icon'] ], $key, false ) ) : ( '' ); ?> /> <i class="fa <?php echo $slices[0]?>"></i> <i class="fa <?php echo $slices[1]?>"></i></label>
@@ -641,6 +643,7 @@ function mos_faq_section_content_start_cb( $args ) {
 	$data = get_mos_faq_active_tab ();
 	?>
 	<div id="mos-faq-content" class="tab-con <?php if($data['active_tab'] == 'content') echo 'active';?>">
+		<h2><?php esc_html_e('Content Styling') ?></h2>
 	<?php
 }
 function mos_faq_field_content_bg_cb( $args ) {
@@ -790,12 +793,19 @@ function mos_faq_section_scripts_start_cb( $args ) {
 	$data = get_mos_faq_active_tab ();
 	?>
 	<div id="mos-faq-scripts" class="tab-con <?php if($data['active_tab'] == 'scripts') echo 'active';?>">
+		<h2><?php esc_html_e('Advanced Styling') ?></h2>
 	<?php
 }
 function mos_faq_field_jquery_cb( $args ) {
 	$options = get_option( 'mos_faq_option' );
 	?>
 	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_faq_option[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_faq' ); ?></label>
+	<?php
+}
+function mos_faq_field_fontawesome_cb( $args ) {
+	$options = get_option( 'mos_faq_option' );
+	?>
+	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_faq_option[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add Font Awesome from Plugin.', 'mos_faq' ); ?></label>
 	<?php
 }
 function mos_faq_field_css_cb( $args ) {
@@ -836,7 +846,7 @@ function mos_faq_section_end_cb( $args ) {
 
 
 function mos_faq_option_page() {
-	add_submenu_page( 'edit.php?post_type=qa', 'Mos FAQ Settings', 'Settings', 'manage_options', 'faq_settings', 'mos_faq_admin_page' );
+	add_submenu_page( 'edit.php?post_type=qa', 'Mos FAQs Settings', 'Settings', 'manage_options', 'faq_settings', 'mos_faq_admin_page' );
 }
 add_action( 'admin_menu', 'mos_faq_option_page' );
 

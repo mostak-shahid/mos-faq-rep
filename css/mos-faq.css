@@ -45,7 +45,6 @@
 }
 [id^="mos-faq-"] .mos-faq-heading .mos-faq-title a {
 	display: block;
-	padding: 10px 15px;
 	text-decoration: none;
 	box-shadow: none;
 	outline: none;

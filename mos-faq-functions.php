@@ -33,8 +33,10 @@ function mos_faq_enqueue_scripts(){
 	$mos_faq_option = get_option( 'mos_faq_option' );
 
 	if (isset($mos_faq_option['mos_faq_jquery']) AND $mos_faq_option['mos_faq_jquery'] == 1) {
-		//echo 'mos_faq_jquery';
 		wp_enqueue_script( 'jquery' );
+	}	
+	if (isset($mos_faq_option['mos_faq_fontawesome']) AND $mos_faq_option['mos_faq_fontawesome'] == 1) {
+		wp_enqueue_style( 'font-awesome.min', plugins_url( 'fonts/font-awesome-4.7.0/css/font-awesome.min.css', __FILE__ ) );
 	}
 	wp_enqueue_style( 'mos-faq.min', plugins_url( 'css/mos-faq.min.css', __FILE__ ) );
 	wp_enqueue_script( 'mos-faq.min', plugins_url( 'js/mos-faq.min.js', __FILE__ ), array('jquery') );
